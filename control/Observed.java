@@ -1,6 +1,6 @@
 package control;
 
-import java.util.Observer;
+import view.Observer;
 
 /**
  * Interface Observed
@@ -13,5 +13,13 @@ public interface Observed {
     
     public void removeObserver(Observer observer);
     
-    public void notifyObserver();
+    public void notifyObserver(String status);
+    
+    public void notifyDadosConexaoAdjacente(String ip, int porta);
+    
+    public void notifyDadosConexaoSubjacente(String ip, int porta);
+    
+    public void notifyStatusConexaoAdjacente(boolean conectado);
+    
+    public void notifyStatusConexaoSubjacente(boolean conectado);
 }

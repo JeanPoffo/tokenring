@@ -1,7 +1,10 @@
 package view;
 
+import control.ControllerSystemBase;
+import java.awt.event.ActionEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 /**
  * Classse View principal do Sistema
@@ -9,10 +12,8 @@ import javax.swing.JFrame;
  * @since 02/11/2018
  */
 public class ViewSystem extends JFrame implements Observer {
-
-    private javax.swing.JButton botaoConexaoAdjacenteAjuda;
+    
     private javax.swing.JButton botaoConexaoAdjacenteConfigurar;
-    private javax.swing.JButton botaoConexaoSubjacenteAjuda;
     private javax.swing.JButton botaoEnviarToken;
     private javax.swing.JButton botaoResetar;
     private javax.swing.JMenuItem itemMenuAjuda;
@@ -36,16 +37,23 @@ public class ViewSystem extends JFrame implements Observer {
     private javax.swing.JPanel panelLog;
     private javax.swing.JTextArea textAreaLog;
 
-    public ViewSystem() {
-        super("Token Ring");
-
+    private ControllerSystemBase controller;
+    
+    public ViewSystem(ControllerSystemBase controller) {
+        this.controller = controller;
         
         this.initComponents();
-    }
-    
-    @Override
-    public void update() {
         
+        this.addListeners();
+        
+        super.setTitle("Token Ring");
+        super.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        super.setResizable(false);
+        super.setIconImage(new ImageIcon(getClass().getResource("/view/icons/program.png")).getImage());
+        super.setLocationRelativeTo(null);
+        super.setVisible(true);
+        
+        this.callConfiguracaoConexaoSubjacent();
     }
     
     private void initComponents() {
@@ -55,13 +63,11 @@ public class ViewSystem extends JFrame implements Observer {
         labelConexaoAdjacentePorta = new javax.swing.JLabel();
         labelConexaoAdjacenteStatus = new javax.swing.JLabel();
         botaoConexaoAdjacenteConfigurar = new javax.swing.JButton();
-        botaoConexaoAdjacenteAjuda = new javax.swing.JButton();
         panelConexaoSubjacente = new javax.swing.JPanel();
         panelConexaoSubjacenteInfo = new javax.swing.JPanel();
         labelConexaoSubjacenteIp = new javax.swing.JLabel();
         labelConexaoSubjacentePorta = new javax.swing.JLabel();
         labelConexaoSubjacenteStatus = new javax.swing.JLabel();
-        botaoConexaoSubjacenteAjuda = new javax.swing.JButton();
         panelLog = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         textAreaLog = new javax.swing.JTextArea();
@@ -81,11 +87,11 @@ public class ViewSystem extends JFrame implements Observer {
 
         panelConexaoAdjacenteInfo.setBorder(javax.swing.BorderFactory.createTitledBorder("Conexão"));
 
-        labelConexaoAdjacenteIp.setText("IP: 192.168.80.30");
+        labelConexaoAdjacenteIp.setText("IP: 000.000.000.000");
 
-        labelConexaoAdjacentePorta.setText("Porta: 50006");
+        labelConexaoAdjacentePorta.setText("Porta: 00000");
 
-        labelConexaoAdjacenteStatus.setIcon(new ImageIcon(getClass().getResource("/view/icons/connected.png")));
+        labelConexaoAdjacenteStatus.setIcon(new ImageIcon(getClass().getResource("/view/icons/disconnected.png")));
 
         javax.swing.GroupLayout panelConexaoAdjacenteInfoLayout = new javax.swing.GroupLayout(panelConexaoAdjacenteInfo);
         panelConexaoAdjacenteInfo.setLayout(panelConexaoAdjacenteInfoLayout);
@@ -113,8 +119,6 @@ public class ViewSystem extends JFrame implements Observer {
 
         botaoConexaoAdjacenteConfigurar.setIcon(new ImageIcon(getClass().getResource("/view/icons/config.png")));
 
-        botaoConexaoAdjacenteAjuda.setIcon(new ImageIcon(getClass().getResource("/view/icons/help.png")));
-
         javax.swing.GroupLayout panelConexaoAdjacenteLayout = new javax.swing.GroupLayout(panelConexaoAdjacente);
         panelConexaoAdjacente.setLayout(panelConexaoAdjacenteLayout);
         panelConexaoAdjacenteLayout.setHorizontalGroup(
@@ -125,7 +129,6 @@ public class ViewSystem extends JFrame implements Observer {
                 .addGap(12, 12, 12)
                 .addComponent(botaoConexaoAdjacenteConfigurar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(botaoConexaoAdjacenteAjuda)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelConexaoAdjacenteLayout.setVerticalGroup(
@@ -135,7 +138,6 @@ public class ViewSystem extends JFrame implements Observer {
                 .addGroup(panelConexaoAdjacenteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(panelConexaoAdjacenteInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(panelConexaoAdjacenteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(botaoConexaoAdjacenteAjuda, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(botaoConexaoAdjacenteConfigurar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -144,11 +146,11 @@ public class ViewSystem extends JFrame implements Observer {
 
         panelConexaoSubjacenteInfo.setBorder(javax.swing.BorderFactory.createTitledBorder("Conexão"));
 
-        labelConexaoSubjacenteIp.setText("IP: 192.168.80.30");
+        labelConexaoSubjacenteIp.setText("IP: 000.000.000.000");
 
-        labelConexaoSubjacentePorta.setText("Porta: 50006");
+        labelConexaoSubjacentePorta.setText("Porta: 00000");
 
-        labelConexaoSubjacenteStatus.setIcon(new ImageIcon(getClass().getResource("/view/icons/connected.png")));
+        labelConexaoSubjacenteStatus.setIcon(new ImageIcon(getClass().getResource("/view/icons/disconnected.png")));
 
         javax.swing.GroupLayout panelConexaoSubjacenteInfoLayout = new javax.swing.GroupLayout(panelConexaoSubjacenteInfo);
         panelConexaoSubjacenteInfo.setLayout(panelConexaoSubjacenteInfoLayout);
@@ -174,8 +176,6 @@ public class ViewSystem extends JFrame implements Observer {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        botaoConexaoSubjacenteAjuda.setIcon(new ImageIcon(getClass().getResource("/view/icons/help.png")));
-
         javax.swing.GroupLayout panelConexaoSubjacenteLayout = new javax.swing.GroupLayout(panelConexaoSubjacente);
         panelConexaoSubjacente.setLayout(panelConexaoSubjacenteLayout);
         panelConexaoSubjacenteLayout.setHorizontalGroup(
@@ -184,7 +184,6 @@ public class ViewSystem extends JFrame implements Observer {
                 .addContainerGap()
                 .addComponent(panelConexaoSubjacenteInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(botaoConexaoSubjacenteAjuda)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelConexaoSubjacenteLayout.setVerticalGroup(
@@ -192,8 +191,7 @@ public class ViewSystem extends JFrame implements Observer {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelConexaoSubjacenteLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(panelConexaoSubjacenteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(panelConexaoSubjacenteInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(botaoConexaoSubjacenteAjuda))
+                    .addComponent(panelConexaoSubjacenteInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -201,7 +199,7 @@ public class ViewSystem extends JFrame implements Observer {
 
         textAreaLog.setColumns(20);
         textAreaLog.setRows(5);
-        textAreaLog.setText("Hello!");
+        textAreaLog.setText("Sistema iniciado");
         jScrollPane1.setViewportView(textAreaLog);
 
         javax.swing.GroupLayout panelLogLayout = new javax.swing.GroupLayout(panelLog);
@@ -289,5 +287,92 @@ public class ViewSystem extends JFrame implements Observer {
         );
 
         pack();
+    }
+
+    private void addListeners() {
+        this.itemMenuResetar.addActionListener((e) -> {
+            this.callResetConfiguracao();
+        });
+        
+        this.itemMenuSair.addActionListener((e) -> {
+            System.exit(0);
+        });
+        
+        this.itemMenuAjuda.addActionListener((ActionEvent e) -> {
+            JOptionPane.showMessageDialog(this, "@todo", "Token Ring", JOptionPane.INFORMATION_MESSAGE);
+        });
+        
+        this.itemMenuSobre.addActionListener((e) -> {
+            JOptionPane.showMessageDialog(this, "Desenvolvido por Jean Poffo", "Token Ring", JOptionPane.INFORMATION_MESSAGE);
+        });
+        
+        this.botaoConexaoAdjacenteConfigurar.addActionListener((e) -> {
+            this.callConfiguracaoConexaoAdjacente();
+        });
+        
+        this.botaoEnviarToken.addActionListener((e) -> {
+            this.controller.sendToken();
+        });
+        
+        this.botaoResetar.addActionListener((e) -> {
+            this.callResetConfiguracao();
+        });
+    }
+    
+    @Override
+    public void update(String status) {
+        this.textAreaLog.setText(this.textAreaLog.getText() + "\n" + status);
+    }
+
+    @Override
+    public void updateDadosConexaoAdjacente(String ip, int porta) {
+        this.labelConexaoAdjacenteIp.setText("IP: " + ip);
+        this.labelConexaoAdjacentePorta.setText("Porta: " + String.valueOf(porta));
+    }
+
+    @Override
+    public void updateDadosConexaoSubjacente(String ip, int porta) {
+       this.labelConexaoSubjacenteIp.setText("IP: " + ip);
+       this.labelConexaoSubjacentePorta.setText("Porta: " + String.valueOf(porta));
+    }
+
+    @Override
+    public void updateStatusConexaoAdjacente(boolean conectado) {
+        if(conectado) {
+            this.botaoConexaoAdjacenteConfigurar.setEnabled(false);
+            this.labelConexaoAdjacenteStatus.setIcon(new ImageIcon(getClass().getResource("/view/icons/connected.png")));
+        }
+        else {
+            this.botaoConexaoAdjacenteConfigurar.setEnabled(true);
+            this.labelConexaoAdjacenteStatus.setIcon(new ImageIcon(getClass().getResource("/view/icons/disconnected.png")));
+        }
+    }
+
+    @Override
+    public void updateStatusConexaoSubjacente(boolean conectado) {
+        if(conectado) {
+            this.labelConexaoSubjacenteStatus.setIcon(new ImageIcon(getClass().getResource("/view/icons/connected.png")));
+        }
+        else {
+            this.labelConexaoAdjacenteStatus.setIcon(new ImageIcon(getClass().getResource("/view/icons/disconnected.png")));
+        }
+    }
+    
+    private void callConfiguracaoConexaoAdjacente() {
+        String ip    = JOptionPane.showInputDialog(this, "Digite o IP ao qual deseja se conectar:");
+        String porta = JOptionPane.showInputDialog(this, "Digite Porta ao qual deseja se conectar:");
+            
+        this.controller.initConexaoAdjacente(ip, Integer.parseInt(porta));
+    }
+    
+    private void callConfiguracaoConexaoSubjacent() {
+        String porta = JOptionPane.showInputDialog(this, "Digite Porta ao qual deseja você deseja receber conexões:");
+            
+        this.controller.initConexaoSubjacente(Integer.parseInt(porta));
+    }
+    
+    private void callResetConfiguracao() {
+        this.controller.resetConexoes();
+        this.callConfiguracaoConexaoSubjacent();
     }
 }

@@ -1,4 +1,5 @@
 
+import control.ControllerSystem;
 import view.ViewSystem;
 
 /**
@@ -12,6 +13,6 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        new ViewSystem().setVisible(true);
+        ControllerSystem.getInstance().addObserver(new ViewSystem(ControllerSystem.getInstance()));
     }
 }

@@ -7,5 +7,13 @@ package view;
  */
 public interface Observer {
     
-    public void update();
+    public void update(String string);
+    
+    public void updateDadosConexaoAdjacente(String ip, int porta);
+    
+    public void updateDadosConexaoSubjacente(String ip, int porta);
+    
+    public void updateStatusConexaoAdjacente(boolean conectado);
+    
+    public void updateStatusConexaoSubjacente(boolean conectado);
 }
