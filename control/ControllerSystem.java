@@ -52,10 +52,9 @@ public class ControllerSystem implements ControllerSystemBase{
     public void initConexaoSubjacente(int porta) {
         try {
             this.conexaoSubjacente = new ConexaoSubjacente(this.getIpConexao(), porta, this.getTokenConexao(), this);
-        
-            new Thread(() -> {
-                this.conexaoSubjacente.start();
-            }).start();
+            this.conexaoSubjacente.start();
+            
+            this.notifyObserver("Iniciado, seu IP é: " + this.getIpConexao() + " e a Porta: " + this.conexaoSubjacente.getPorta());
         } 
         catch (UnknownHostException ex) {
             this.notifyObserver("ERROR [" + ex.getMessage() + "]");
@@ -70,11 +69,8 @@ public class ControllerSystem implements ControllerSystemBase{
     @Override
     public void initConexaoAdjacente(String ip, int porta) {
         try {
-            this.conexaoAdjacente  = new ConexaoAdjacente(ip, porta, this.getTokenConexao(), this);
-
-            new Thread(() -> {
-                this.conexaoAdjacente.start();
-            }).start();
+            this.conexaoAdjacente = new ConexaoAdjacente(ip, porta, this.getTokenConexao(), this);
+            this.conexaoAdjacente.start();
         } 
         catch (Exception ex) {
             this.notifyObserver("ERROR [" + ex.getMessage() + "]");
@@ -96,7 +92,12 @@ public class ControllerSystem implements ControllerSystemBase{
     public void addObserver(Observer observer) {
         this.observers.add(observer);
         
-        this.notifyObserver("Iniciado, seu IP é: " + this.conexaoSubjacente.getIp() + " e a Porta: " + this.conexaoSubjacente.getPorta());
+        try {
+            this.notifyObserver("Iniciado, seu IP é: " + this.getIpConexao() + " e a Porta: " + this.conexaoSubjacente.getPorta());
+        } 
+        catch (UnknownHostException ex) {
+            this.notifyObserver("ERROR [" + ex.getMessage() + "]");
+        }
     }
 
     /** @param observer */
@@ -178,7 +179,7 @@ public class ControllerSystem implements ControllerSystemBase{
             Thread.sleep(1000);
             this.notifyObserver("Executando Tarefa 4");
             Thread.sleep(1000);
-            this.notifyObserver("Passando a bola do Token");
+            this.notifyObserver("Enviando Token");
             this.sendToken();
         } 
         catch (InterruptedException ex) {

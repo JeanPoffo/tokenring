@@ -25,14 +25,13 @@ public class ConexaoSubjacente extends Conexao {
             this.initConfiguracaoConexao();
             
             while(this.socket.isConnected()) {
-                this.getController().notifyObserver(this.bufferedReaderIn.readLine());
                 if(this.bufferedReaderIn.readLine().equals(this.getToken())) {
                     this.getController().executaProcesso();
                 }
             }
         }
         catch (IOException ex) {
-            this.getController().notifyObserver("ERROR [ " + ex.getMessage() + " ]");
+            this.getController().notifyObserver(ex.getMessage());
         }
         finally {
             this.closeConfiguracaoConexao();
@@ -40,7 +39,9 @@ public class ConexaoSubjacente extends Conexao {
     }
 
     @Override
-    public void stopConexao() {
+    public synchronized void stopConexao() {
+        super.stopConexao();
+        
         if(this.serverSocket != null) {
             try {
                 this.serverSocket.close();
@@ -49,8 +50,6 @@ public class ConexaoSubjacente extends Conexao {
                 this.getController().notifyObserver("ERROR [ " + ex.getMessage() + " ]");
             }
         }
-        
-        super.stopConexao();
     }
     
     @Override
@@ -65,7 +64,7 @@ public class ConexaoSubjacente extends Conexao {
     protected void closeConfiguracaoConexao() {
         super.closeConfiguracaoConexao();
         
-        this.getController().notifyDadosConexaoSubjacente("", this.getPorta());
+        this.getController().notifyDadosConexaoSubjacente("000.000.000.000", 00000);
         this.getController().notifyStatusConexaoSubjacente(false);
     }
 }

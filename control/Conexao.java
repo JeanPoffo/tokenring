@@ -62,7 +62,9 @@ abstract public class Conexao extends Thread {
         this.token = token;
     }
     
-    public void stopConexao() {
+    public synchronized void stopConexao() {
+        this.interrupt();
+        
         if(this.socket != null) {
             try {
                 this.socket.close();

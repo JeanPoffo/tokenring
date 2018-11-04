@@ -2,6 +2,7 @@ package view;
 
 import control.ControllerSystemBase;
 import java.awt.event.ActionEvent;
+import java.util.regex.Pattern;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -299,7 +300,7 @@ public class ViewSystem extends JFrame implements Observer {
         });
         
         this.itemMenuAjuda.addActionListener((ActionEvent e) -> {
-            JOptionPane.showMessageDialog(this, "@todo", "Token Ring", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Conecter a um computador da rede e \n logo apos aguarde alguem se conectar ao seu computador", "Token Ring", JOptionPane.INFORMATION_MESSAGE);
         });
         
         this.itemMenuSobre.addActionListener((e) -> {
@@ -359,16 +360,24 @@ public class ViewSystem extends JFrame implements Observer {
     }
     
     private void callConfiguracaoConexaoAdjacente() {
-        String ip    = JOptionPane.showInputDialog(this, "Digite o IP ao qual deseja se conectar:");
-        String porta = JOptionPane.showInputDialog(this, "Digite Porta ao qual deseja se conectar:");
+        String ip    = JOptionPane.showInputDialog(this, "Digite o IP ao qual deseja se conectar:", "Token Ring", JOptionPane.QUESTION_MESSAGE);
+        String porta = JOptionPane.showInputDialog(this, "Digite Porta ao qual deseja se conectar:", "Token Ring", JOptionPane.QUESTION_MESSAGE);
             
+        this.botaoConexaoAdjacenteConfigurar.setEnabled(false);
+        
         this.controller.initConexaoAdjacente(ip, Integer.parseInt(porta));
     }
     
     private void callConfiguracaoConexaoSubjacent() {
-        String porta = JOptionPane.showInputDialog(this, "Digite Porta ao qual deseja você deseja receber conexões:");
-            
-        this.controller.initConexaoSubjacente(Integer.parseInt(porta));
+        String porta = JOptionPane.showInputDialog(this, "Digite Porta ao qual deseja você deseja receber conexões:", "Token Ring", JOptionPane.QUESTION_MESSAGE);
+        
+        if(porta == null || porta.isEmpty() || !Pattern.matches("\\d*\\d+", porta)) {
+            JOptionPane.showMessageDialog(this, "Digite um numero de porta!", "Token Ring", JOptionPane.INFORMATION_MESSAGE);
+            this.callConfiguracaoConexaoSubjacent();
+        }
+        else {
+            this.controller.initConexaoSubjacente(Integer.parseInt(porta));
+        }
     }
     
     private void callResetConfiguracao() {

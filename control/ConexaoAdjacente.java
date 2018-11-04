@@ -20,13 +20,9 @@ public class ConexaoAdjacente extends Conexao {
             this.socket = new Socket(this.getIp(), this.getPorta());
         
             this.initConfiguracaoConexao();
-            
-            while(this.socket.isConnected()) {
-                Thread.sleep(1);
-            }
         } 
-        catch (IOException | InterruptedException ex) {
-            this.getController().notifyObserver("ERROR [ " + ex.getMessage() + " ]");
+        catch (IOException ex) {
+            this.getController().notifyObserver(ex.getMessage());
         }
         finally {
             this.closeConfiguracaoConexao();
@@ -34,7 +30,7 @@ public class ConexaoAdjacente extends Conexao {
     }
     
     public void sendToken() {
-        this.printWriterOut.print(this.getToken());
+        this.printWriterOut.println(this.getToken());
     }
     
     @Override
@@ -49,7 +45,7 @@ public class ConexaoAdjacente extends Conexao {
     protected void closeConfiguracaoConexao() {
         super.closeConfiguracaoConexao();
         
-        this.getController().notifyDadosConexaoAdjacente("", this.getPorta());
+        this.getController().notifyDadosConexaoAdjacente("000.000.000.000", 00000);
         this.getController().notifyStatusConexaoAdjacente(false);
     }
 }
