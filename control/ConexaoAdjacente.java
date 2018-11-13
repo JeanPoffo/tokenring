@@ -2,6 +2,8 @@ package control;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Classe de conexão Socket
@@ -20,8 +22,12 @@ public class ConexaoAdjacente extends Conexao {
             this.socket = new Socket(this.getIp(), this.getPorta());
         
             this.initConfiguracaoConexao();
+            
+            while(this.socket.isConnected()) {
+                Thread.sleep(1);
+            }
         } 
-        catch (IOException ex) {
+        catch (IOException | InterruptedException ex) {
             this.getController().notifyObserver(ex.getMessage());
         }
         finally {
